@@ -1,0 +1,218 @@
+\NeedsTeXFormat{LaTeX2e}[2021/06/01]
+\ProvidesPackage{gBeamer}[2023/09/25 Personal package for Beamer with LuaLaTeX]
+
+\RequirePackage{fontspec}
+\RequirePackage{unicode-math}
+\RequirePackage{polyglossia}
+
+\setmainfont{STIX Two Text}
+\setsansfont{STIX Two Text}
+\setmathfont{STIX Two Math} % unicode-math
+
+% from polyglossia
+\setdefaultlanguage{english}
+\setotherlanguages{russian,french}
+
+
+
+\RequirePackage{mathtools}  % to center right, left or center the elements of a matrix, ex: \begin{bmatrix*}[r] ... \end{bmatrix*}
+\RequirePackage{tensor}     % 4 sub/super-scripts around variable with correct alignement
+\RequirePackage{xargs}      % optional arguments newcommandx  
+\RequirePackage{accents}    % math accents
+\RequirePackage{stmaryrd}   % for double brackets
+\RequirePackage{pifont}     % for checkmark and crossmark
+
+
+% --- Checkmark & crossmark symbols ---
+% must weap in \text{} to avoid printing "3" and "7" instead
+\newcommand{\Cmark}{\text{\ding{51}}}  % checkmark from pifont package
+\newcommand{\Xmark}{\text{\ding{55}}}  % crossmark
+
+
+
+% very small space (to avoid clipping between tensor and indices)
+% based on https://tex.stackexchange.com/questions/332146/a-canonical-or-robust-white-space-thinner-than
+\protected\def\verythinspace{%
+  \ifmmode
+    \mskip0.33\thinmuskip
+  \else
+    \ifhmode
+      \kern0.055em
+    \fi
+  \fi
+}
+
+
+
+% --- Math size scaling ---
+% from https://tex.stackexchange.com/questions/43065/matrices-too-big-to-fit-the-width-of-a-page
+\newcommand\scalemath[2]{\scalebox{#1}{\mbox{\ensuremath{\displaystyle #2}}}}
+
+
+
+
+% % --- transpose ---
+% % /!\/!\/!\/!\/!\/!\ \tr name already defined fir tge jpconf.cls document class /!\/!\/!\/!\/!\/!\
+% \newcommand{\trans}[1][0.33]{
+%     \raisebox{#1ex}{$\intercal$}
+% }
+% % from https://tex.stackexchange.com/questions/587275/the-transpose-correct-or-mostly-agreed-upon-notation-concern
+% \makeatletter
+% \newcommand*{\transpose}{\bgroup\@transpose}
+% \newcommand*{\@transpose}[1][0]{\mathpalette\@@transpose{#1}\egroup}
+% \newcommand*{\@@transpose}[2]{\setbox0=\hbox{\m@th$#1\mkern-#2mu\trans[0]$}\raise\dp0\box0}
+% \makeatother
+
+% --- transpose ---
+% /!\/!\/!\/!\/!\/!\ \tr name already defined fir tge jpconf.cls document class /!\/!\/!\/!\/!\/!\
+\newcommand{\Transpose}[1][0.33]{
+    \raisebox{#1ex}{\scalebox{0.75}{$\symsf{T}$}}
+}
+% from https://tex.stackexchange.com/questions/587275/the-transpose-correct-or-mostly-agreed-upon-notation-concern
+\makeatletter
+\newcommand*{\Trans}{\bgroup\@Trans}
+\newcommand*{\@Trans}[1][0]{\mathpalette\@@Trans{#1}\egroup}
+\newcommand*{\@@Trans}[2]{\setbox0=\hbox{\m@th$#1\mkern-#2mu\Transpose[0.33]$}\raise\dp0\box0}
+\makeatother
+
+% --- inverse ---
+% /!\/!\/!\/!\/!\/!\ \tr name already defined fir tge jpconf.cls document class /!\/!\/!\/!\/!\/!\
+\newcommand{\Inverse}[1][0.33]{
+    \raisebox{#1ex}{\scalebox{0.75}{$-1$}}
+}
+% from https://tex.stackexchange.com/questions/587275/the-transpose-correct-or-mostly-agreed-upon-notation-concern
+\makeatletter
+\newcommand*{\Inv}{\bgroup\@Inv}
+\newcommand*{\@Inv}[1][0]{\mathpalette\@@Inv{#1}\egroup}
+\newcommand*{\@@Inv}[2]{\setbox0=\hbox{\m@th$#1\mkern-#2mu\Inverse[0.33]$}\raise\dp0\box0}
+\makeatother
+
+% --- inverse transpose ---
+% /!\/!\/!\/!\/!\/!\ \tr name already defined fir tge jpconf.cls document class /!\/!\/!\/!\/!\/!\
+\newcommand{\InverseTranspose}[1][0.33]{
+    \raisebox{#1ex}{\scalebox{0.75}{$-\symsf{T}$}}
+}
+% from https://tex.stackexchange.com/questions/587275/the-transpose-correct-or-mostly-agreed-upon-notation-concern
+\makeatletter
+\newcommand*{\Invtrans}{\bgroup\@Invtrans}
+\newcommand*{\@Invtrans}[1][0]{\mathpalette\@@Invtrans{#1}\egroup}
+\newcommand*{\@@Invtrans}[2]{\setbox0=\hbox{\m@th$#1\mkern-#2mu\InverseTranspose[0.33]$}\raise\dp0\box0}
+\makeatother
+
+
+
+
+% linear algebra operators
+\DeclareMathOperator*{\diag}{diag}
+\DeclareMathOperator*{\Span}{span}
+
+% set theory operators
+\DeclareMathOperator*{\interior}{int}
+
+% optimization operators
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% zero elements
+\newcommand{\zero}{0}
+\newcommand{\bigzero}{O}
+
+% complex conjugate
+\newcommand{\Conj}[1]{\overline{#1}}
+
+% by definition symbol
+%   equal by definition is default
+%   ex: equivalent by definition \Rdef[\Leftrightarrow]
+\newcommand{\Rdef}[1][=]{#1\vcentcolon}
+\newcommand{\Ldef}[1][=]{\vcentcolon#1}
+
+% algorithm assign symbol
+\newcommand{\Assign}{\leftarrow}
+
+% divergence operator in Roman upright letters
+\DeclareMathOperator{\Div}{div}
+
+% Modal Assurace Criterion (MAC) operator in Roman upright letters
+\DeclareMathOperator{\MAC}{MAC}
+
+% matrix lower/upper property indicator
+\newcommand{\Sym}{\symup{\text{\scriptsize{Sym.}}}}
+\newcommand{\smallzero}{\symup{\text{\scriptsize{0}}}}
+
+% left/right eigenvector indicator
+\newcommand{\Lev}{\symscr{l}}
+\newcommand{\Rev}{\symscr{r}}
+
+% space new command
+\newcommand{\Sp}[2]{\symbb{#1}^{#2}}
+\newcommand{\Bd}[1]{\uppartial #1}
+
+% derivation roman upright new commands
+%   differiential operator
+\newcommand{\Diff}{\symup{d}}
+%   partial differiential operator
+\DeclareRobustCommand{\uppartial}{\text{\rotatebox[origin=t]{20}{\scalebox{0.95}[1]{$\partial$}}}\hspace{-1pt}}
+\newcommand{\pDiff}{\uppartial}
+%   variation operator
+\newcommand{\Varia}{\Delta}
+%   small variation operator
+\newcommand{\sVaria}{\symup{\delta}}
+%   ordinary derivative
+\newcommand{\Deriv}[2]{\frac{\Diff #1}{\Diff #2}}
+%   material derivative
+\newcommand{\mDeriv}[2]{\frac{\symup{D} #1}{\symup{D} #2}}
+%   partial derivative
+\newcommand{\pDeriv}[2]{\frac{\pDiff #1}{\pDiff #2}}
+%   order n ordinary derivative
+\newcommand{\nDeriv}[3]{\frac{\Diff^#3 #1}{\Diff #2^#3}}
+%   order n material derivative
+\newcommand{\nmDeriv}[3]{\frac{\symup{D}^#3 #1}{\symup{D} #2^#3}}
+%   order n partial derivative
+\newcommand{\npDeriv}[3]{\frac{\pDiff^#3 #1}{\pDiff #2^#3}}
+
+%%% Nullspace of matrix %%%
+\newcommand{\Nullspace}[1]{\symup{N}(#1)}
+
+%%% tensor new command %%%
+% roman upright
+\newcommandx*{\Ts}[6][2={}, 3={}, 4={}, 5={}, 6={}, usedefault]{
+    \tensor*[^{#5}_{#6}]{\verythinspace \symbfup{#1} \verythinspace}{^{#3}_{#2}^{#4}}
+}
+% cursive
+\newcommandx*{\Tsc}[6][2={}, 3={}, 4={}, 5={}, 6={}, usedefault]{
+    \tensor*[^{#5}_{#6}]{\verythinspace \symbfscr{#1} \verythinspace}{^{#3}_{#2}^{#4}}
+}
+% gothic
+\newcommandx*{\Tsf}[6][2={}, 3={}, 4={}, 5={}, 6={}, usedefault]{
+    \tensor*[^{#5}_{#6}]{\verythinspace \symbffrak{#1} \verythinspace}{^{#3}_{#2}^{#4}}
+}
+%%% scalar order 0 tensor new command %%%
+\newcommandx*{\Tss}[6][2={}, 3={}, 4={}, 5={}, 6={}, usedefault]{
+    \tensor*[^{#5}_{#6}]{\verythinspace #1 \verythinspace}{^{#3}_{#2}^{#4}}
+}
+
+
+
+
+% --- Declare cyrillic alphabet for math ---
+
+% \RequirePackage[russian]{hyperref}    % conflict but unecessary (with Beamer?)
+
+% bold {b} upright {n} character for math
+\DeclareSymbolFont{cyrletters}{\encodingdefault}{\familydefault}{b}{n}
+\newcommand{\makecyrmathletter}[1]{%
+  \begingroup\lccode`a=#1\lowercase{\endgroup
+  \Umathcode`a}="0 \csname symcyrletters\endcsname\space #1
+}
+\count255="409
+\loop\ifnum\count255<"44F
+  \advance\count255 by 1
+  \makecyrmathletter{\count255}
+\repeat
+
+% bold upright Ж in math, normal upright in text 
+% \symX command from unicode-math have not effect
+\newcommand{\Zh}{Ж}
+
+
+\endinput

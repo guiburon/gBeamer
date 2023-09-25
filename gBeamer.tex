@@ -1,0 +1,85 @@
+\documentclass[9pt, xcolor={table}]{beamer} % default font size is 11pt, !!! does not work: xcolor=table for colored cell !!!
+\PassOptionsToPackage{english}{babel} % Thème anglais (english) ou français (french)
+
+
+\usetheme[compress]{Berlin} % compress: inline content navigation 
+\setbeamertemplate{page number in head/foot}[framenumber]   % to have slide number on the Berlin theme
+
+% ------------ Packages ------------
+\usepackage{gBeamer}
+
+% \usepackage{mathtools} % ?????????????
+\usepackage{tikz}
+\usepackage{adjustbox}  % powerful redimensionment environment that works for complex things
+
+\usepackage[
+    round-mode=places, 
+    round-precision=3, % number of decimals
+    round-pad = false, % no 0 decimal padding for integer
+    group-separator={\,}, % thousand separator
+    output-decimal-marker={.}  % decimal separator
+    ]{siunitx}  % for thousand separator and units
+\usepackage{pgfplots}   % for plot
+
+% better tabular: https://www.xm1math.net/doculatex/tableaux.html
+\usepackage{array,multirow,makecell}
+\setcellgapes{1pt}
+\makegapedcells
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash }b{#1}}   % arbitrary width right aligned tabular column
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash }b{#1}}  % arbitrary width left aligned tabular column
+\newcolumntype{C}[1]{>{\centering\arraybackslash }b{#1}}    % arbitrary width centered tabular column
+% use r, l, c for automatic width tabular columns
+% use | or || for vertical single or double lines
+% use \hline for horizontal lines
+
+% justify text: https://tex.stackexchange.com/questions/55589/text-justify-in-beamer
+\usepackage{ragged2e}   % for \justifying
+\apptocmd{\frame}{}{\justifying}{} % Allow optional arguments after frame
+
+\usepackage[linesnumbered,boxruled,vlined]{algorithm2e}
+% *** algo object contours ***
+% ruled: only horizontal lines with title at the top
+% boxruled: horizontal lines inside box with title at the top
+% *** block delimiters ***
+% lined: vertical lines with "end"
+% vlines: brackets without "end"
+% *** algo numerotation ***
+% algosection: use section numerotation as prefix 
+% ----------------------------------
+
+
+% ------------ Template ------------
+\setbeamertemplate{navigation symbols}{}    % remove the navigation buttons
+% ----------------------------------
+
+% ------------ Colors ------------
+\definecolor{ansysgold}{HTML}{FFB71B} % Ansys gold (primary)
+
+\definecolor{donegreen}{HTML}{3BB143} % green color for done task, "green" color
+\definecolor{currentblue}{HTML}{007FFF} % blue color for current task, "azure" color
+
+\setbeamercolor{palette primary}{bg=black,fg=white}
+\setbeamercolor{palette secondary}{bg=black,fg=white}
+\setbeamercolor{palette tertiary}{bg=black,fg=white}
+\setbeamercolor{palette quaternary}{bg=black,fg=white}
+\setbeamercolor{structure}{fg=black} % itemize, enumerate, etc
+\setbeamercolor{section in toc}{fg=black} % TOC sections
+% Override palette coloring with secondary
+\setbeamercolor{subsection in head/foot}{bg=ansysgold,fg=black}
+\setbeamercolor{institute in head/foot}{bg=ansysgold,fg=black}
+
+% % Couleurs LTDS
+% \definecolor{LTDStext}{RGB}{44,74,153} % Couleur reference texte
+% \definecolor{LTDSblue}{RGB}{43,49,122} % Bleu reference
+% \colorlet{LTDSbluelight}{LTDSblue!10} % Bleu clair
+% \definecolor{LTDScyan}{RGB}{20,186,227} % Cyan reference
+% \colorlet{LTDScyanlight}{LTDSblue!10} % Cyan clair
+% \definecolor{LTDSgreen}{RGB}{36,171,108} % Vert reference
+% \colorlet{LTDSgreenlight}{LTDSgreen!10} % Vert clair
+% \definecolor{rougeECL}{RGB}{189,25,43}
+% \colorlet{rougeECLlight}{rougeECL!10}
+% --------------------------------
+
+% ------------ Figures ------------
+% \setbeamertemplate{caption}{\raggedright\insertcaption\par}     % global no "Figure #: " before caption, use in a local { } for a specific figure
+% ---------------------------------
